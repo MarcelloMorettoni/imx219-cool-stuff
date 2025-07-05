@@ -3,13 +3,37 @@ import tkinter as tk
 from tkinter import ttk
 from PIL import Image, ImageTk
 import time
+import argparse
+
+
+def gstreamer_pipeline(sensor_id=0,
+                        capture_width=1280,
+                        capture_height=720,
+                        display_width=640,
+                        display_height=480,
+                        framerate=30,
+                        flip_method=2):
+    """Return a GStreamer pipeline for the Jetson CSI cameras."""
+    return (
+        f"nvarguscamerasrc sensor-id={sensor_id} ! "
+        f"video/x-raw(memory:NVMM), width={capture_width}, height={capture_height}, framerate={framerate}/1 ! "
+        f"nvvidconv flip-method={flip_method} ! "
+        f"video/x-raw, width={display_width}, height={display_height}, format=BGRx ! "
+        f"videoconvert ! appsink"
+    )
+
+def open_capture(source):
+    if isinstance(source, int) or (isinstance(source, str) and source.isdigit()):
+        return cv2.VideoCapture(int(source))
+    return cv2.VideoCapture(source, cv2.CAP_GSTREAMER)
+
 
 class StereoApp(tk.Tk):
-    def __init__(self, left_index=0, right_index=1):
+    def __init__(self, left_source=0, right_source=1):
         super().__init__()
         self.title("IMX219 Stereo Demos")
-        self.left_cam = cv2.VideoCapture(left_index)
-        self.right_cam = cv2.VideoCapture(right_index)
+        self.left_cam = open_capture(left_source)
+        self.right_cam = open_capture(right_source)
         self.protocol("WM_DELETE_WINDOW", self.on_close)
 
         self.notebook = ttk.Notebook(self)
@@ -68,5 +92,12 @@ class StereoApp(tk.Tk):
         self.destroy()
 
 if __name__ == '__main__':
-    app = StereoApp()
+    parser = argparse.ArgumentParser(description='IMX219 stereo camera demo')
+    parser.add_argument('left', nargs='?', default='0',
+                        help='Left camera index or GStreamer pipeline')
+    parser.add_argument('right', nargs='?', default='1',
+                        help='Right camera index or GStreamer pipeline')
+    args = parser.parse_args()
+
+    app = StereoApp(args.left, args.right)
     app.mainloop()

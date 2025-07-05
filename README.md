@@ -19,9 +19,12 @@ pip install opencv-python Pillow
 ## Running the demo
 
 Execute the `stereo_demo.py` script. By default it tries to open `/dev/video0` and `/dev/video1`.
+If you are using CSI cameras on a Jetson, pass the full GStreamer pipeline for each camera:
 
 ```bash
-python3 stereo_demo.py
+python3 stereo_demo.py \
+  "nvarguscamerasrc sensor-id=0 ! video/x-raw(memory:NVMM), width=1280, height=720, framerate=30/1 ! nvvidconv ! video/x-raw, format=BGRx ! videoconvert ! appsink" \
+  "nvarguscamerasrc sensor-id=1 ! video/x-raw(memory:NVMM), width=1280, height=720, framerate=30/1 ! nvvidconv ! video/x-raw, format=BGRx ! videoconvert ! appsink"
 ```
 
 You will see a window with two tabs:
