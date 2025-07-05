@@ -2,9 +2,30 @@ import cv2
 import argparse
 
 
+def gstreamer_pipeline(sensor_id=0,
+                        capture_width=1280,
+                        capture_height=720,
+                        display_width=640,
+                        display_height=480,
+                        framerate=30,
+                        flip_method=2):
+    """Return a GStreamer pipeline for Jetson CSI cameras."""
+    return (
+        f"nvarguscamerasrc sensor-id={sensor_id} ! "
+        f"video/x-raw(memory:NVMM), width={capture_width}, height={capture_height}, framerate={framerate}/1 ! "
+        f"nvvidconv flip-method={flip_method} ! "
+        f"video/x-raw, width={display_width}, height={display_height}, format=BGRx ! "
+        "videoconvert ! appsink"
+    )
+
+
 def open_capture(src):
-    """Open a camera source. Supports numeric indices and GStreamer pipelines."""
+    """Open a camera source. Numeric IDs use the Jetson Argus pipeline."""
     if isinstance(src, int) or (isinstance(src, str) and src.isdigit()):
+        pipeline = gstreamer_pipeline(sensor_id=int(src))
+        cap = cv2.VideoCapture(pipeline, cv2.CAP_GSTREAMER)
+        if cap.isOpened():
+            return cap
         return cv2.VideoCapture(int(src))
     return cv2.VideoCapture(src, cv2.CAP_GSTREAMER)
 

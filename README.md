@@ -38,11 +38,13 @@ Snapshots are saved in the current directory with a timestamped filename.
 
 ### Simple OpenCV viewer
 
-For a minimal example without Tkinter, run `simple_stereo.py` with the same arguments. It shows both
-streams side by side in an OpenCV window. Press **q** to quit.
+For a minimal example without Tkinter, run `simple_stereo.py`. When numeric
+camera IDs are provided, the script now automatically opens the Jetson CSI
+cameras using the `nvarguscamerasrc` pipeline. It shows both streams side by
+side in an OpenCV window. Press **q** to quit.
 
 ```bash
 python3 simple_stereo.py 0 1
 ```
 
-Replace `0` and `1` with the appropriate GStreamer pipelines when using CSI cameras.
+You can still pass full GStreamer pipelines if needed.
