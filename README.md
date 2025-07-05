@@ -20,8 +20,15 @@ pip install opencv-python Pillow
 
 ### Tkinter demo
 
-Execute the `stereo_demo.py` script. By default it tries to open `/dev/video0` and `/dev/video1`.
-If you are using CSI cameras on a Jetson, pass the full GStreamer pipeline for each camera:
+Execute the `stereo_demo.py` script. When numeric camera IDs are provided, the
+script now automatically opens the Jetson CSI cameras using the
+`nvarguscamerasrc` pipeline:
+
+```bash
+python3 stereo_demo.py 0 1
+```
+
+You can still pass full GStreamer pipelines if you need custom settings:
 
 ```bash
 python3 stereo_demo.py \
