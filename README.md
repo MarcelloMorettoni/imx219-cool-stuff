@@ -16,7 +16,9 @@ Install the Python dependencies with:
 pip install opencv-python Pillow
 ```
 
-## Running the demo
+## Running the demos
+
+### Tkinter demo
 
 Execute the `stereo_demo.py` script. By default it tries to open `/dev/video0` and `/dev/video1`.
 If you are using CSI cameras on a Jetson, pass the full GStreamer pipeline for each camera:
@@ -33,3 +35,14 @@ You will see a window with two tabs:
 * **Stereo View** – displays a live feed from both cameras next to each other.
 
 Snapshots are saved in the current directory with a timestamped filename.
+
+### Simple OpenCV viewer
+
+For a minimal example without Tkinter, run `simple_stereo.py` with the same arguments. It shows both
+streams side by side in an OpenCV window. Press **q** to quit.
+
+```bash
+python3 simple_stereo.py 0 1
+```
+
+Replace `0` and `1` with the appropriate GStreamer pipelines when using CSI cameras.
