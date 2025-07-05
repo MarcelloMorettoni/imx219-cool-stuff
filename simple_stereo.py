@@ -20,13 +20,13 @@ def gstreamer_pipeline(sensor_id=0,
 
 
 def open_capture(src):
-    """Open a camera source. Numeric IDs use the Jetson Argus pipeline."""
+    """Open a camera source using only the Jetson Argus pipeline."""
     if isinstance(src, int) or (isinstance(src, str) and src.isdigit()):
         pipeline = gstreamer_pipeline(sensor_id=int(src))
         cap = cv2.VideoCapture(pipeline, cv2.CAP_GSTREAMER)
         if cap.isOpened():
             return cap
-        return cv2.VideoCapture(int(src))
+        return cap
     return cv2.VideoCapture(src, cv2.CAP_GSTREAMER)
 
 
