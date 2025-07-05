@@ -21,8 +21,9 @@ pip install opencv-python Pillow
 ### Tkinter demo
 
 Execute the `stereo_demo.py` script. When numeric camera IDs are provided, the
-script now automatically opens the Jetson CSI cameras using the
-`nvarguscamerasrc` pipeline:
+script opens the Jetson CSI cameras using the `nvarguscamerasrc` pipeline only.
+The scripts no longer fall back to V4L2 devices, so make sure the `nvargus-daemon`
+service is running (restart with `sudo systemctl restart nvargus-daemon` if needed):
 
 ```bash
 python3 stereo_demo.py 0 1
@@ -46,8 +47,8 @@ Snapshots are saved in the current directory with a timestamped filename.
 ### Simple OpenCV viewer
 
 For a minimal example without Tkinter, run `simple_stereo.py`. When numeric
-camera IDs are provided, the script now automatically opens the Jetson CSI
-cameras using the `nvarguscamerasrc` pipeline. It shows both streams side by
+camera IDs are provided, the script opens the Jetson CSI cameras using only the
+`nvarguscamerasrc` pipeline. It shows both streams side by
 side in an OpenCV window. Press **q** to quit.
 
 ```bash
