@@ -56,3 +56,16 @@ python3 simple_stereo.py 0 1
 ```
 
 You can still pass full GStreamer pipelines if needed.
+
+### Jetcam-based viewer
+
+If the optional `jetcam` library is installed, you can run `jetcam_stereo.py`
+to capture frames using the `CSICamera` interface instead of OpenCV's
+`VideoCapture`. This script shows both camera streams side by side in an
+OpenCV window:
+
+```bash
+python3 jetcam_stereo.py 0 1 --width 640 --height 480
+```
+
+Press **q** to exit the viewer.
